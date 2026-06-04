@@ -1,7 +1,92 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8"><!DOCTYPE html>
+<html lang="en">
+<head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TikTok Downloader Gratis</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+<body class="bg-slate-900 text-white min-h-screen flex flex-col justify-center items-center p-4">
+
+    <div class="w-full max-w-md bg-slate-800 p-6 rounded-2xl shadow-xl border border-slate-700">
+        <h1 class="text-2xl font-bold text-center mb-2 text-pink-500">🎵 TikTok Downloader</h1>
+        <p class="text-slate-400 text-sm text-center mb-6">Unduh video TikTok tanpa watermark secara gratis</p>
+
+        <div class="space-y-4">
+            <input type="text" id="tiktokUrl" placeholder="Tempelkan link video TikTok di sini..." 
+                class="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-500 text-white placeholder-slate-400 text-sm">
+            
+            <button onclick="downloadVideo()" id="btnSubmit"
+                class="w-full bg-pink-600 hover:bg-pink-700 text-white font-semibold py-3 rounded-xl transition duration-200 cursor-pointer text-center block">
+                Ambil Video
+            </button>
+        </div>
+
+        <div id="loading" class="hidden text-center my-4 text-slate-400 text-sm animate-pulse">
+            Sedang memproses video, tunggu sebentar...
+        </div>
+
+        <div id="result" class="hidden mt-6 pt-6 border-t border-slate-700 text-center">
+            <p id="videoTitle" class="text-sm font-medium mb-4 text-slate-300 truncate"></p>
+            <a id="downloadBtn" href="#" target="_blank" rel="noopener noreferrer"
+                class="inline-block bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-3 rounded-xl transition duration-200 w-full text-center">
+                📥 Download Sekarang (Tanpa WM)
+            </a>
+        </div>
+    </div>
+
+    <script>
+        async function downloadVideo() {
+            const urlInput = document.getElementById('tiktokUrl').value.trim();
+            const btnSubmit = document.getElementById('btnSubmit');
+            const loading = document.getElementById('loading');
+            const result = document.getElementById('result');
+            const videoTitle = document.getElementById('videoTitle');
+            const downloadBtn = document.getElementById('downloadBtn');
+
+            if (!urlInput) {
+                alert('Tolong masukkan link TikTok terlebih dahulu!');
+                return;
+            }
+
+            // Reset tampilan & nyalakan loading
+            result.classList.add('hidden');
+            loading.classList.remove('hidden');
+            btnSubmit.disabled = true;
+            btnSubmit.innerText = 'Memproses...';
+
+            try {
+                // Menggunakan API publik gratis dari Tikwm
+                const apiUrl = `https://www.tikwm.com/api/?url=${encodeURIComponent(urlInput)}`;
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+
+                if (data.code === 0 && data.data) {
+                    videoTitle.innerText = data.data.title || "Video TikTok";
+                    
+                    // Link download langsung video tanpa watermark
+                    downloadBtn.href = `https://www.tikwm.com${data.data.play}`;
+                    
+                    // Munculkan tombol download hijau setelah data sukses diambil
+                    result.classList.remove('hidden');
+                } else {
+                    alert('Gagal mengambil video. Pastikan link yang kamu masukkan benar dan valid!');
+                }
+            } catch (error) {
+                console.error(error);
+                alert('Terjadi kesalahan koneksi ke server.');
+            } finally {
+                loading.classList.add('hidden');
+                btnSubmit.disabled = false;
+                btnSubmit.innerText = 'Ambil Video';
+            }
+        }
+    </script>
+</body>
+</html>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TikTok Downloader Gratis</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
